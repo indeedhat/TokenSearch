@@ -89,21 +89,33 @@ QUERY_
                 `doc_id` INT,
                 `word_id` INT,
                 `count` INT,
-                PRIMARY_KEY(`id`)
+                PRIMARY_KEY(`id`),
+                UNIQUE KEY(`doc_id`, `word_id`)
             ) ENGINE=INNODB DEFAULT CHARSET=uft8mb4 COLLATION=utf8mb4_bin;
 
             CREATE TABLE ihat_search_fword_{$key} (
                 `id` INT AUTO_INCREMENT,
+                `doc_id` INT,
                 `field_id` INT,
                 `word_id` INT,
                 `count` INT,
-                PRIMARY_KEY(`id`)
+                PRIMARY_KEY(`id`),
+                UNIQUE KEY(`doc_id`, `field_id`, `word_id`)
             ) ENGINE=INNODB DEFAULT CHARSET=uft8mb4 COLLATION=utf8mb4_bin;
         ");
     }
 
     public function insertRow(string $key, RowIndexer $indexer): bool
     {
+        // check for existing
+
+        // insert all words
+
+        // load all words
+        
+        // insert doc words
+
+        // insert field words
     }
 
     public function updateRow(string $key, RowIndexer $indexer): bool
@@ -121,9 +133,20 @@ QUERY_
 
     public function removeRow(string $key, int $id): bool
     {
+        // load doc words
+        
+        // delete field words
+
+        // delete doc words
+
+        // update word counts
     }
 
-    public function query(string $key, array $tokens): array
+    public function findWords(string $key, array $tokens, array $fields = []): array
+    {
+    }
+
+    public function findPartialWords(string $key, array $tokens, array $fields = []): array
     {
     }
 }
