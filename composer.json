@@ -1,0 +1,21 @@
+{
+    "name": "indeedhat/token-search",
+    "description": "tokenise and search data",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Matt Holmes",
+            "email": "iam4423@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4" : {
+            "IndeedHat\\TokenSearch\\": "src",
+            "IndeedHat\\TokenSearch\\Test\\": "test"
+        }
+    }, 
+    "require": {
+        "phpunit/phpunit": "^8"
+    }
+}
