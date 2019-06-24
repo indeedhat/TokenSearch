@@ -45,7 +45,7 @@ class MySQLStorageDriver implements StorageDriverInterface
 
     public function schemaExists(string $key): bool
     {
-        $result = $this->pdo(
+        $result = $this->pdo->query(
 <<<QUERY_
             SELECT 
                 COUNT(*) as c
@@ -108,6 +108,15 @@ QUERY_
 
     public function updateRow(string $key, RowIndexer $indexer): bool
     {
+        $this->pdo->beginTransaction();
+
+        if ($this->removeRow($key, $indexer->id) && $this->insertRow($key, $indexer)) {
+            $this->pdo->commit();
+            return true;
+        } 
+
+        $this->pdo->rollBack();
+        return false;
     }
 
     public function removeRow(string $key, int $id): bool
