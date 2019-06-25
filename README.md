@@ -17,15 +17,19 @@ a library to tokenise, store and then search text
 - [ ] mysql storage adapter
     - [x] check for schema
     - [x] create schema
-    - [ ] insert new documents
+    - [x] insert new documents
     - [x] update documents
-    - [ ] delete documents
-- [ ] finalize discovery interface
-- [ ] mysql discovery adapter
-    - [ ] load documents
+    - [x] delete documents
+- [x] finalize discovery interface
+- [x] mysql discovery adapter
+    - [x] load documents
 
 ## search 
 - [ ] simple search
+    - [x] load full words
+    - [x] load partial words
+    - [ ] create search results from words
+    - [ ] create search results from partial words
 - [ ] fuzzy search
 - [ ] weighted by fields
 

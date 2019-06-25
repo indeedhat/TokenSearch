@@ -2,7 +2,7 @@
 
 namespace IndeedHat\TokenSearch\Test;
 
-use IndeedHat\TokenSearch\Database\MySQLStorageDriver;
+use IndeedHat\TokenSearch\Database\MySQLStorageAdapter;
 use IndeedHat\TokenSearch\Indexer\RowIndexer;
 use PHPUnit\Framework\TestCase;
 
@@ -19,7 +19,7 @@ class ImplementationTest extends TestCase
      */
     public static function init(): void
     {
-        self::$driver = new MySQLStorageDriver("localhost", "test", "root", "");
+        self::$driver = new MySQLStorageAdapter("localhost", "test", "root", "");
         
         if (!self::$driver->schemaExists(self::$key)) {
             print "creating schema";

@@ -4,7 +4,7 @@ namespace IndeedHat\TokenSearch\Database;
 
 use IndeedHat\TokenSearch\Indexer\RowIndexer;
 
-interface StorageDriverInterface
+interface StorageAdapterInterface
 {
     public function schemaExists(string $key): bool;
     public function createSchema(string $key): bool;

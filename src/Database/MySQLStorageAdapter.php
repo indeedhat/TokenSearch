@@ -7,7 +7,7 @@ use IndeedHat\TokenSearch\Indexer\RowIndexer;
 use PDO;
 use PDOStatement;
 
-class MySQLStorageDriver implements StorageDriverInterface
+class MySQLStorageAdapter implements StorageAdapterInterface
 {
     /**
      * @var PDO
@@ -38,6 +38,7 @@ class MySQLStorageDriver implements StorageDriverInterface
     function __construct(string $host, string $database, string $user, string $passwd)
     {
         $this->pdo = new PDO("mysql:host={$host};dbname={$database}", $user, $passwd);
+        $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
         $this->host = $host;
         $this->database = $database;
         $this->user = $user;
@@ -134,7 +135,7 @@ QUERY_
                     ["doc" => $indexer->id, "word" => $row["id"], "count" => $indexer->words[$row["word"]]]
                 );
 
-                if ("00000" != $stmnt->errorCode()) {
+                if (!Helper::ok($stmnt)) {
                     return false;
                 }
             }
@@ -158,7 +159,7 @@ QUERY_
                     );
 
 
-                    if ("00000" != $stmt->errorCode()) {
+                    if (!Helper::ok($stmt)) {
                         return false;
                     }
                 }
@@ -184,12 +185,47 @@ QUERY_
     public function removeRow(string $key, int $id): bool
     {
         // load doc words
+        $words = $this->query(
+            "SELECT * FROM tksearch_dword_{$key} WHERE doc_id = :id",
+            compact("id")
+        );
         
         // delete field words
-
+        $stmt = $this->query(
+            "DELETE FROM tksearch_fword_{$key} WHERE doc_id = :id",
+            compact("id")
+        );
+        if (!Helper::ok($stmt)) {
+            return false;
+        }
+            
         // delete doc words
+        $stmt = $this->query(
+            "DELETE FROM tksearch_dword_{$key} WHERE doc_id = :id",
+            compact("id")
+        );
+        if (!Helper::ok($stmt)) {
+            return false;
+        }
 
         // update word counts
+        $outcome = $this->transaction(function() use ($key, $words) {
+            foreach ($words as $word) {
+                $stmt = $this->query("UPDATE tksearch_word_{$key} SET count = `count` - ?", [$word["count"]]);
+                if (!Helper::ok($stmt)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }); 
+        if (!$outcome) {
+            return false;
+        }
+        
+        // clear words without counts
+        $stmt = $this->query("DELETE FROM tksearch_word_{$key} WHERE count = 0");
+        return Helper::ok($stmt);
     }
 
     public function findWords(string $key, array $tokens, array $fields = []): array
@@ -204,6 +240,14 @@ QUERY_
 
     public function findPartialWords(string $key, array $tokens, array $fields = []): array
     {
+        $statement = $this->query(
+            "SELECT * FROM tksearch_word_{$key} WHERE {$this->multiLike("word", $tokens)}", 
+            array_map(function($token) {
+                return "%$token%";
+            }, $tokens)
+        );
+
+        return $statement->fetchAll();
     }
 
     private function multiLike($field, $words): string
@@ -262,7 +306,7 @@ QUERY_
                     compact("field")
                 );
 
-                if ("00000" != $out->errorCode()) {
+                if (!Helper::ok($out)) {
                     return false;
                 }
             }
@@ -281,7 +325,7 @@ QUERY_
                     compact("word", "count")
                 );
             
-                if ("00000" != $out->errorCode()) {
+                if (!Helper::ok($out)) {
                     return false;
                 }
             }
