@@ -8,6 +8,7 @@ interface StorageAdapterInterface
 {
     public function schemaExists(string $key): bool;
     public function createSchema(string $key): bool;
+    public function dropSchema(string $key): bool;
 
     public function insertRow(string $key, RowIndexer $indexer): bool;
     public function updateRow(string $key, RowIndexer $indexer): bool;

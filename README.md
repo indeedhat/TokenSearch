@@ -5,7 +5,7 @@ a library to tokenise, store and then search text
 ## tokenize text
 - [x] interface
 - [x] whitespace tokenizer
-- [ ] more complex word tokenizer
+- [ ] better tokenizer
 
 ## index fields
 - [x] interface
@@ -25,6 +25,8 @@ a library to tokenise, store and then search text
     - [x] load documents
 
 ## search 
+- [x] create index
+- [x] delete index
 - [ ] simple search
     - [x] load full words
     - [x] load partial words

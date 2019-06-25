@@ -108,6 +108,18 @@ QUERY_
         ");
     }
 
+    public function dropSchema(string $key): bool
+    {
+        $stmt = $this->query("
+            DROP TABLE tksearch_word_{$key};
+            DROP TABLE tksearch_dowrd_{$key};
+            DROP TABLE tksearch_fword_{$key};
+            DROP TABLE tksearch_field_{$key};
+        ");
+
+        return Helper::ok($stmt);
+    }
+
     public function insertRow(string $key, RowIndexer $indexer): bool
     {
         // check for existing
