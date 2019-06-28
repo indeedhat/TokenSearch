@@ -16,4 +16,10 @@ interface StorageAdapterInterface
 
     public function findWords(string $key, array $tokens, array $fields = []): array;
     public function findPartialWords(string $key, array $tokens, array $fields = []): array;
+
+    public function countDocs(string $key): int;
+    public function docsForToken(string $key, string $token): array;
+    public function fieldsForToken(string $key, string $token): array;
+    public function docsForPartialToken(string $key, string $token): array;
+    public function fieldsForPartialToken(string $key, string $token): array;
 }

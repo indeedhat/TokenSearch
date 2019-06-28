@@ -240,26 +240,51 @@ QUERY_
         return Helper::ok($stmt);
     }
 
-    public function findWords(string $key, array $tokens, array $fields = []): array
+    public function countDocs(string $key): int
+    {
+        $statement = $this->query("SELECT COUNT(*) FROM tksearch_doc_{$key};");
+
+        return $statement->fetchColumn(0);
+    }
+
+    public function docsForToken(string $key, string $token): array
     {
         $statement = $this->query(
-            "SELECT * FROM tksearch_word_{$key} WHERE {$this->multiLike("word", $tokens)}", 
-            $tokens
+            "SELECT tksearch_doc_{$key}.*, tksearch_word_{$key}.word 
+            FROM tksearch_word_{$key}
+            INNER JOIN tksearch_word_{$key} 
+            ON tksearch_doc_{$key}.word_id = tksearch_word_{$key}.id
+            WHERE word LIKE ?",
+            $token
         );
 
         return $statement->fetchAll();
     }
 
-    public function findPartialWords(string $key, array $tokens, array $fields = []): array
+    public function fieldsForToken(string $key, string $token): array
     {
         $statement = $this->query(
-            "SELECT * FROM tksearch_word_{$key} WHERE {$this->multiLike("word", $tokens)}", 
-            array_map(function($token) {
-                return "%$token%";
-            }, $tokens)
+            "SELECT tksearch_fword_{$key}.*, tksearch_field_{$key}.field 
+            FROM tksearch_word_{$key}
+            INNER JOIN tksearch_word_{$key} 
+            ON tksearch_fword_{$key}.word_id = tksearch_word_{$key}.id
+            INNER JOIN tksearch_field_{$key}
+            ON tksearch_field_{$key}.word_id = tksearch_word_{$key}.id
+            WHERE word LIKE ?",
+            $token
         );
 
         return $statement->fetchAll();
+    }
+
+    public function docsForPartialToken(string $key, string $token): array
+    {
+        return $this->docsForToken($key, "%$token%");
+    }
+
+    public function fieldsForPartialToken(string $key, string $token): array
+    {
+        return $this->fieldsForToken($key, "%$token%");
     }
 
     private function multiLike($field, $words): string
