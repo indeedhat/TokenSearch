@@ -12,9 +12,9 @@ class WeightedFieldOrder implements SorterInterface
      */
     public $partialWords;
 
-    public function run(StorageAdapterInterface $storage, array $tokens, array $fields = []): ResultsCollection
+    public function run(StorageAdapterInterface $storage, string $key, array $tokens, array $fields = []): ResultsCollection
     {
-        $docs = !empty($fields) 
+        $docs = !empty($fields)
             ? $this->withFields($storage, $tokens, $fields)
             : $this->withoutFields($storage, $tokens);
 
@@ -22,27 +22,27 @@ class WeightedFieldOrder implements SorterInterface
             return new Result($id, $weight);
         }, $docs);
 
-        $collection = new ResultsCollection();
+        $collection = new ResultsCollection($docs, count($docs));
         $collection->reorder(ResultsCollection::ORDER_ASC, ResultsCollection::ORDER_BY_ID);
 
         return $collection;
-    } 
+    }
 
-    private function withoutFields(StorageAdapterInterface $storage, array $tokens): array
+    private function withoutFields(StorageAdapterInterface $storage, string $key, array $tokens): array
     {
         // TODO: decide if this is what i want to do when no fields are provided
         throw new Exception("searching without field weights is not supported on this sorter");
     }
 
-    private function withFields(StorageAdapterInterface $storage, array $tokens, array $fields): array
+    private function withFields(StorageAdapterInterface $storage, string $key, array $tokens, array $fields): array
     {
         $docs = [];
 
         foreach ($tokens as $token) {
             if ($this->partialWords) {
-                $tmp = array_merge($docs, $storage->fieldsForPartialToken($token));
+                $tmp = array_merge($docs, $storage->fieldsForPartialToken($key, $token));
             } else {
-                $tmp = array_merge($docs, $storage->fieldsForToken($token));
+                $tmp = array_merge($docs, $storage->fieldsForToken($key, $token));
             }
 
             foreach ($tmp as $doc) {

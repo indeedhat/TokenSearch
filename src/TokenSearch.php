@@ -78,21 +78,26 @@ class TokenSearch
     public function createIndex(string $query, string $idField): bool
     {
         if (!$this->discoveryAdapter) {
+            print "no discovery" . PHP_EOL;
             return false;
         }
 
-        if ($this->storageAdapter->schemaExists()) {
+        if ($this->storageAdapter->schemaExists($this->key)) {
+            print "schema exists" . PHP_EOL;
             return false;
         }
 
-        if (!$this->storageAdapter->createSchema()) {
+        if (!$this->storageAdapter->createSchema($this->key)) {
+            print "failed to create schema" . PHP_EOL;
             return false;
         }
 
         if (!$this->discoveryAdapter->query($query)) {
+            print "discovery query failed" . PHP_EOL;
             return false;
         }
 
+        print "while time" . PHP_EOL;
         while ($row = $this->discoveryAdapter->fetchRow()) {
             if (empty($row[$idField])) {
                 return false;
@@ -102,6 +107,7 @@ class TokenSearch
             unset($row[$idField]);
 
             $indexer = new RowIndexer($row, $id);
+            $indexer->index();
             if (!$this->storageAdapter->insertRow($this->key, $indexer)) {
                 return false;
             }
@@ -112,12 +118,12 @@ class TokenSearch
 
     public function removeIndex(): bool
     {
-        return $this->storageAdapter->dropSchema();
+        return $this->storageAdapter->dropSchema($this->key);
     }
 
     public function indexExists(): bool
     {
-        return $this->storageAdapter->schemaExists();
+        return $this->storageAdapter->schemaExists($this->key);
     }
 
     public function updateIndex(string $query, string $idField): bool
@@ -171,14 +177,10 @@ class TokenSearch
         return $this->storageAdapter->removeRow($index);
     }
 
-    public function search(string $query, array $fields = []): array
+    public function search(string $query, array $fields = []): ResultsCollection
     {
         $tokens = $this->tokenizer->tokenize($query);
-        if ($this->partialWords) {
-            $words = $this->storageAdapter->findPartialWords($this->key, $tokens);
-        } else {
-            $words = $this->storageAdapter->findWords($this->key, $tokens);
-        }
+        return $this->sorter->run($this->storageAdapter, $this->key, $tokens, $fields);
     }
 
     protected function initDefaults(): void

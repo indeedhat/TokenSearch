@@ -2,16 +2,21 @@
 
 namespace IndeedHat\TokenSearch\Test;
 
+use IndeedHat\TokenSearch\Database\MySQLDiscoveryAdapter;
 use IndeedHat\TokenSearch\Database\MySQLStorageAdapter;
 use IndeedHat\TokenSearch\Indexer\RowIndexer;
+use IndeedHat\TokenSearch\Sorter\DocIdSorter;
+use IndeedHat\TokenSearch\TokenSearch;
+use IndeedHat\TokenSearch\Tokenizer\WhiteSpaceTokenizer;
 use PHPUnit\Framework\TestCase;
 
 class ImplementationTest extends TestCase
 {
     /**
-     * @var MySQLStorageDriver $driver
+     * @var TokenSearch $tksearch
      */
-    public static $driver;
+    public static $tksearch;
+
     public static $key = "tst";
 
     /**
@@ -19,36 +24,52 @@ class ImplementationTest extends TestCase
      */
     public static function init(): void
     {
-        self::$driver = new MySQLStorageAdapter("localhost", "test", "root", "");
-        
-        if (!self::$driver->schemaExists(self::$key)) {
-            print "creating schema";
-            self::$driver->createSchema(self::$key);
-        }
-    }
+        $tk = new TokenSearch("tst");
 
-    public function exampleData(): array
-    {
-        return [
-            [
-                1,
-                [
-                    "field.1" => "field 1 text",
-                    "field.2" => "field 2 text"
-                ]
-            ]
-        ];
+        $tk->withDiscoveryAdapter(
+            new MySQLDiscoveryAdapter(
+                "localhost",
+                "test",
+                "root",
+                ""
+            )
+        );
+
+        $tk->withStorageAdapter(
+            new MySQLStorageAdapter(
+                "localhost",
+                "test",
+                "root",
+                ""
+            )
+        );
+
+        $tk->withSorter(new DocIdSorter());
+        $tk->withTokenizer(new WhiteSpaceTokenizer());
+
+        if ($tk->indexExists()) {
+            $tk->removeIndex();
+        } 
+
+        self::$tksearch = $tk;
     }
 
     /**
      * @test
-     * @dataProvider exampleData
      */
-    public function doTheThing(int $id, array $fields): void
+    public function indexCheck(): void
+    {
+        $this->assertTrue(
+            self::$tksearch->createIndex("SELECT * FROM customer_data", "id")
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function searchCheck(): void
     {
         $this->expectNotToPerformAssertions();
-        $indexer = new RowIndexer($fields, $id);
-        $indexer->index();
-        self::$driver->insertRow(self::$key, $indexer);
+        var_dump(self::$tksearch->search("jane"));
     }
 }

@@ -12,31 +12,31 @@ class DocIdSorter implements SorterInterface
  */
     public $partialWords;
 
-    public function run(StorageAdapterInterface $storage, array $tokens, array $fields = []): ResultsCollection
+    public function run(StorageAdapterInterface $storage, string $key, array $tokens, array $fields = []): ResultsCollection
     {
-        $docs = !empty($fields) 
-            ? $this->withFields($storage, $tokens, $fields)
-            : $this->withoutFields($storage, $tokens);
+        $docs = !empty($fields)
+            ? $this->withFields($storage, $key, $tokens, $fields)
+            : $this->withoutFields($storage, $key, $tokens);
 
         $docs = array_map(function($id) {
             return new Result($id, 1);
         }, $docs);
 
-        $collection = new ResultsCollection();
+        $collection = new ResultsCollection($docs, count($docs));
         $collection->reorder(ResultsCollection::ORDER_ASC, ResultsCollection::ORDER_BY_ID);
 
         return $collection;
     }
 
-    private function withFields(StorageAdapterInterface $storage, array $tokens, array $fields): array
+    private function withFields(StorageAdapterInterface $storage, $key, array $tokens, array $fields): array
     {
         $docs = [];
 
         foreach ($tokens as $token) {
             if ($this->partialWords) {
-                $docs = array_merge($storage->fieldsForPartialToken($token));
+                $docs = array_merge($storage->fieldsForPartialToken($key, $token));
             } else {
-                $docs = array_merge($storage->fieldsForToken($token));
+                $docs = array_merge($storage->fieldsForToken($key, $token));
             }
         }
 
@@ -52,15 +52,15 @@ class DocIdSorter implements SorterInterface
 
     }
 
-    private function withoutFields(StorageAdapterInterface $storage, array $tokens): array
+    private function withoutFields(StorageAdapterInterface $storage, $key, array $tokens): array
     {
         $docs = [];
 
         foreach ($tokens as $token) {
             if ($this->partialWords) {
-                $docs = array_merge($storage->docsForPartialToken($token));
+                $docs = array_merge($storage->docsForPartialToken($key, $token));
             } else {
-                $docs = array_merge($storage->docsForToken($token));
+                $docs = array_merge($storage->docsForToken($key, $token));
             }
         }
 

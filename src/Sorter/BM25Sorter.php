@@ -7,7 +7,7 @@ use IndeedHat\TokenSearch\ResultsCollection;
 
 class BM25Sorter implements SorterInterface
 {
-    public function run(StorageAdapterInterface $storage, array $tokens, array $fiels = []): ResultsCollection
+    public function run(StorageAdapterInterface $storage, string $key, array $tokens, array $fiels = []): ResultsCollection
     {
     }
 }

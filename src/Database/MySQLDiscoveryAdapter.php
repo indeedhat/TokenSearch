@@ -47,7 +47,7 @@ class MySQLDiscoveryAdapter implements DiscoveryAdapterInterface
         $this->passwd = $passwd;
     }
 
-    public function query(string $query): array
+    public function query(string $query): bool
     {
         $this->statement = $this->pdo->query($query);
 
@@ -56,6 +56,6 @@ class MySQLDiscoveryAdapter implements DiscoveryAdapterInterface
 
     public function fetchRow(): ?array
     {
-        return $this->statement->fetch();
+        return $this->statement->fetch() ?: null;
     }
 }

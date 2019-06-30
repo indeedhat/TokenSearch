@@ -48,31 +48,32 @@ class MySQLStorageAdapter implements StorageAdapterInterface
 
     public function schemaExists(string $key): bool
     {
-        $result = $this->pdo->query(
-<<<QUERY_
-            SELECT 
-                COUNT(*) as c
-            FROM
-                `information_schema`.`TABLES`
-            WHERE
-                `table_schmea` = {$this->pdo->quote($this->database)}
-            AND
-                `table_name` IN(
-                    {$this->pdo->quote("tksearch_word_{$key}")},
-                    {$this->pdo->quote("tksearch_field_{$key}")},
-                    {$this->pdo->quote("tksearch_dword_{$key}")},
-                    {$this->pdo->quote("tksearch_fword_{$key}")}
-                )
-QUERY_
-        );
+        $statement = $this->pdo->query("SHOW TABLES;");
+        if(!$statement) {
+            return false;
+        }
 
-        return 4 == $result["c"];
+        $fields = [
+            "tksearch_word_{$key}" => false,
+            "tksearch_dword_{$key}" => false,
+            "tksearch_fword_{$key}" => false,
+            "tksearch_field_{$key}" => false,
+        ];
+
+        foreach ($statement->fetchAll() as $row) {
+            $fields[$row["Tables_in_{$this->database}"]] = true;
+        }
+
+        return $fields["tksearch_word_{$key}"]
+            && $fields["tksearch_fword_{$key}"] 
+            && $fields["tksearch_dword_{$key}"] 
+            && $fields["tksearch_field_{$key}"];
     }
 
     public function createSchema(string $key): bool
     {
         return (bool)$this->pdo->query("
-            CREATE TABLE tksearch_word_{$key} (
+            CREATE TABLE IF NOT EXISTS tksearch_word_{$key} (
                 `id` INT(11) NOT NULL AUTO_INCREMENT,
                 `word` VARCHAR(50),
                 `count` INT(11),
@@ -80,14 +81,14 @@ QUERY_
                 UNIQUE KEY(`word`)
             ) ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
         
-            CREATE TABLE tksearch_field_{$key} (
+            CREATE TABLE IF NOT EXISTS tksearch_field_{$key} (
                 `id` INT(11) NOT NULL AUTO_INCREMENT,
                 `field` VARCHAR(50),
                 PRIMARY KEY(`id`),
                 UNIQUE KEY(`field`)
             ) ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
 
-            CREATE TABLE tksearch_dword_{$key} (
+            CREATE TABLE IF NOT EXISTS tksearch_dword_{$key} (
                 `id` INT(11) NOT NULL AUTO_INCREMENT,
                 `doc_id` INT(11),
                 `word_id` INT(11),
@@ -96,7 +97,7 @@ QUERY_
                 UNIQUE KEY(`doc_id`, `word_id`)
             ) ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
 
-            CREATE TABLE tksearch_fword_{$key} (
+            CREATE TABLE IF NOT EXISTS tksearch_fword_{$key} (
                 `id` INT(11) NOT NULL AUTO_INCREMENT,
                 `doc_id` INT(11),
                 `field_id` INT(11),
@@ -112,7 +113,7 @@ QUERY_
     {
         $stmt = $this->query("
             DROP TABLE tksearch_word_{$key};
-            DROP TABLE tksearch_dowrd_{$key};
+            DROP TABLE tksearch_dword_{$key};
             DROP TABLE tksearch_fword_{$key};
             DROP TABLE tksearch_field_{$key};
         ");
@@ -255,7 +256,7 @@ QUERY_
             INNER JOIN tksearch_word_{$key} 
             ON tksearch_doc_{$key}.word_id = tksearch_word_{$key}.id
             WHERE word LIKE ?",
-            $token
+            [$token]
         );
 
         return $statement->fetchAll();
@@ -271,7 +272,7 @@ QUERY_
             INNER JOIN tksearch_field_{$key}
             ON tksearch_field_{$key}.word_id = tksearch_word_{$key}.id
             WHERE word LIKE ?",
-            $token
+            [$token]
         );
 
         return $statement->fetchAll();
@@ -336,6 +337,7 @@ QUERY_
     private function insertFields(string $key, RowIndexer $indexer): bool
     {
         return $this->transaction(function() use ($key, $indexer) {
+            print_r($indexer);
 
             foreach ($indexer->fields as $field => $_) {
                 $out = $this->query(
@@ -343,7 +345,7 @@ QUERY_
                     compact("field")
                 );
 
-                if (!Helper::ok($out)) {
+                if (!Helper::ok($out) && !Helper::duplicateKey($out)) {
                     return false;
                 }
             }

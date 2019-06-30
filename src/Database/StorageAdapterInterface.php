@@ -14,8 +14,8 @@ interface StorageAdapterInterface
     public function updateRow(string $key, RowIndexer $indexer): bool;
     public function removeRow(string $key, int $id): bool;
 
-    public function findWords(string $key, array $tokens, array $fields = []): array;
-    public function findPartialWords(string $key, array $tokens, array $fields = []): array;
+    /* public function findWords(string $key, array $tokens, array $fields = []): array; */
+    /* public function findPartialWords(string $key, array $tokens, array $fields = []): array; */
 
     public function countDocs(string $key): int;
     public function docsForToken(string $key, string $token): array;
