@@ -3,8 +3,9 @@
 namespace IndeedHat\TokenSearch;
 
 use Exception;
+use Countable;
 
-class ResultsCollection
+class ResultsCollection implements Countable
 {
     const ORDER_ASC = 1;
     const ORDER_DESC = -1;
@@ -39,7 +40,7 @@ class ResultsCollection
 
     public function ids(): array
     {
-        return array_map(function(Restult $result) {
+        return array_map(function(Result $result) {
             return $result->docId;
         }, $this->results);
     }
@@ -56,7 +57,7 @@ class ResultsCollection
 
     public function reorder(string $order = self::ORDER_DESC, $orderBy = self::ORDER_BY_WEIGHT): void
     {
-        $this->results = usort($this->results, function (Result $a, Result $b) use ($order, $orderBy) {
+        usort($this->results, function (Result $a, Result $b) use ($order, $orderBy) {
             if ($a->{$orderBy} == $b->{$orderBy}) {
                 return 0;
             }
@@ -68,5 +69,13 @@ class ResultsCollection
     public function totalDocs(): int
     {
         return $this->totalDocs;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function count()
+    {
+        return count($this->results);
     }
 }

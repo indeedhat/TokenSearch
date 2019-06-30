@@ -2,6 +2,8 @@
 
 namespace IndeedHat\TokenSearch;
 
+use Exception;
+
 /**
  * @property int $docId
  * @property fload $weight
@@ -27,5 +29,10 @@ class Result
     function __get($name)
     {
         return $this->{$name} ?? null;
+    }
+
+    function __set($name, $val) 
+    {
+        throw new Exception("results are immutable");
     }
 }

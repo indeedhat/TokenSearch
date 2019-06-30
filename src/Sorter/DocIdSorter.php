@@ -7,6 +7,9 @@ use IndeedHat\TokenSearch\ResultsCollection;
 
 class DocIdSorter implements SorterInterface
 {
+/**
+ * @var bool
+ */
     public $partialWords;
 
     public function run(StorageAdapterInterface $storage, array $tokens, array $fields = []): ResultsCollection

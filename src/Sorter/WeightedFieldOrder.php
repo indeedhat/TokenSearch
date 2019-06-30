@@ -1,0 +1,78 @@
+<?php
+
+namespace IndeedHat\TokenSearch\Sorter;
+
+use IndeedHat\TokenSearch\Database\StorageAdapterInterface;
+use IndeedHat\TokenSearch\ResultsCollection;
+
+class WeightedFieldOrder implements SorterInterface
+{
+    /**
+     * @var bool
+     */
+    public $partialWords;
+
+    public function run(StorageAdapterInterface $storage, array $tokens, array $fields = []): ResultsCollection
+    {
+        $docs = !empty($fields) 
+            ? $this->withFields($storage, $tokens, $fields)
+            : $this->withoutFields($storage, $tokens);
+
+        $docs = array_map(function($weight, $id) {
+            return new Result($id, $weight);
+        }, $docs);
+
+        $collection = new ResultsCollection();
+        $collection->reorder(ResultsCollection::ORDER_ASC, ResultsCollection::ORDER_BY_ID);
+
+        return $collection;
+    } 
+
+    private function withoutFields(StorageAdapterInterface $storage, array $tokens): array
+    {
+        // TODO: decide if this is what i want to do when no fields are provided
+        throw new Exception("searching without field weights is not supported on this sorter");
+    }
+
+    private function withFields(StorageAdapterInterface $storage, array $tokens, array $fields): array
+    {
+        $docs = [];
+
+        foreach ($tokens as $token) {
+            if ($this->partialWords) {
+                $tmp = array_merge($docs, $storage->fieldsForPartialToken($token));
+            } else {
+                $tmp = array_merge($docs, $storage->fieldsForToken($token));
+            }
+
+            foreach ($tmp as $doc) {
+                $weight = $this->calcDocWeight($token, $doc, $fields);
+                if (!$weight) {
+                    continue;
+                }
+
+                if (!empty($docs[$doc["doc_id"]])) {
+                    $docs[$doc["doc_id"]] += $weight;
+                } else {
+                    $docs[$doc["doc_id"]] = $weight;
+                }
+            }
+        }
+
+        return $docs;
+    }
+
+    private function calcDocWeight(string $token, array $docField, array $fields): float
+    {
+        if (empty($fields[$docField["field"]])) {
+            return 0;
+        }
+
+        $modifier = 1;
+        if ($this->partialWords) {
+            $modifier = 1 / strlen($docField["word"]) * strlen($token);
+        }
+
+        return $fields[$docField["field"]] * $modifier;
+    }
+}

@@ -264,7 +264,7 @@ QUERY_
     public function fieldsForToken(string $key, string $token): array
     {
         $statement = $this->query(
-            "SELECT tksearch_fword_{$key}.*, tksearch_field_{$key}.field 
+            "SELECT tksearch_fword_{$key}.*, tksearch_field_{$key}.field, tksearch_field_{$key}.word
             FROM tksearch_word_{$key}
             INNER JOIN tksearch_word_{$key} 
             ON tksearch_fword_{$key}.word_id = tksearch_word_{$key}.id
