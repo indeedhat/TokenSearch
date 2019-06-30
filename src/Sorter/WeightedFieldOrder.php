@@ -4,6 +4,7 @@ namespace IndeedHat\TokenSearch\Sorter;
 
 use IndeedHat\TokenSearch\Database\StorageAdapterInterface;
 use IndeedHat\TokenSearch\ResultsCollection;
+use IndeedHat\TokenSearch\Result;
 
 class WeightedFieldOrder implements SorterInterface
 {

@@ -3,16 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="f0eb743b-84db-4174-aa5c-7e2e404ba451" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.phpunit.result.cache" beforeDir="false" afterPath="$PROJECT_DIR$/.phpunit.result.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Database/Helper.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Database/Helper.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Database/MySQLDiscoveryAdapter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Database/MySQLDiscoveryAdapter.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Database/MySQLStorageAdapter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Database/MySQLStorageAdapter.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Database/StorageAdapterInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Database/StorageAdapterInterface.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Sorter/BM25Sorter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Sorter/BM25Sorter.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Sorter/DocIdSorter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Sorter/DocIdSorter.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Sorter/SorterInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Sorter/SorterInterface.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Sorter/WeightedFieldOrder.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Sorter/WeightedFieldOrder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TokenSearch.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/TokenSearch.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/ImplementationTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/test/ImplementationTest.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -28,7 +19,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/ImplementationTest.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="256">
+            <state relative-caret-position="526">
               <caret line="72" selection-start-line="72" selection-end-line="72" />
             </state>
           </provider>
@@ -52,16 +43,16 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Sorter/DocIdSorter.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="24" column="61" selection-start-line="24" selection-start-column="61" selection-end-line="24" selection-end-column="61" />
+            <state relative-caret-position="331">
+              <caret line="62" selection-start-line="62" selection-end-line="62" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Sorter/WeightedFieldOrder.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="345">
@@ -87,8 +78,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Database/MySQLStorageAdapter.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="181">
-              <caret line="131" selection-start-line="131" selection-end-line="131" />
+            <state relative-caret-position="421">
+              <caret line="264" column="30" selection-start-line="264" selection-start-column="30" selection-end-line="264" selection-end-column="30" />
             </state>
           </provider>
         </entry>
@@ -111,9 +102,9 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/TokenSearch.php" />
-        <option value="$PROJECT_DIR$/src/Database/MySQLStorageAdapter.php" />
         <option value="$PROJECT_DIR$/src/Sorter/DocIdSorter.php" />
         <option value="$PROJECT_DIR$/src/Sorter/WeightedFieldOrder.php" />
+        <option value="$PROJECT_DIR$/src/Database/MySQLStorageAdapter.php" />
       </list>
     </option>
   </component>
@@ -208,7 +199,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1561915039496" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1561915489347" />
     <property name="go.gopath.indexing.explicitly.defined" value="true" />
     <property name="go.vendoring.notification.had.been.shown" value="true" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
@@ -268,26 +259,11 @@
       <option name="presentableId" value="Default" />
       <updated>1561910627601</updated>
       <workItem from="1561910631729" duration="1868000" />
-      <workItem from="1561914694569" duration="324000" />
+      <workItem from="1561914694569" duration="615000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="ImplementationTest - 2019.06.30 at 17h 54m 40s.xml">
-      <configuration name="ImplementationTest" configurationId="PHPUnitRunConfigurationType" />
-    </history-entry>
-    <history-entry file="ImplementationTest - 2019.06.30 at 17h 55m 01s.xml">
-      <configuration name="ImplementationTest" configurationId="PHPUnitRunConfigurationType" />
-    </history-entry>
-    <history-entry file="ImplementationTest - 2019.06.30 at 17h 56m 09s.xml">
-      <configuration name="ImplementationTest" configurationId="PHPUnitRunConfigurationType" />
-    </history-entry>
-    <history-entry file="ImplementationTest - 2019.06.30 at 17h 56m 22s.xml">
-      <configuration name="ImplementationTest" configurationId="PHPUnitRunConfigurationType" />
-    </history-entry>
-    <history-entry file="ImplementationTest - 2019.06.30 at 17h 57m 06s.xml">
-      <configuration name="ImplementationTest" configurationId="PHPUnitRunConfigurationType" />
-    </history-entry>
     <history-entry file="ImplementationTest_searchCheck - 2019.06.30 at 18h 11m 59s.xml">
       <configuration name="ImplementationTest.searchCheck" configurationId="PHPUnitRunConfigurationType" />
     </history-entry>
@@ -303,15 +279,29 @@
     <history-entry file="ImplementationTest - 2019.06.30 at 18h 16m 00s.xml">
       <configuration name="ImplementationTest" configurationId="PHPUnitRunConfigurationType" />
     </history-entry>
+    <history-entry file="ImplementationTest - 2019.06.30 at 18h 17m 07s.xml">
+      <configuration name="ImplementationTest" configurationId="PHPUnitRunConfigurationType" />
+    </history-entry>
+    <history-entry file="ImplementationTest - 2019.06.30 at 18h 18m 07s.xml">
+      <configuration name="ImplementationTest" configurationId="PHPUnitRunConfigurationType" />
+    </history-entry>
+    <history-entry file="ImplementationTest - 2019.06.30 at 18h 20m 52s.xml">
+      <configuration name="ImplementationTest" configurationId="PHPUnitRunConfigurationType" />
+    </history-entry>
+    <history-entry file="ImplementationTest - 2019.06.30 at 18h 21m 16s.xml">
+      <configuration name="ImplementationTest" configurationId="PHPUnitRunConfigurationType" />
+    </history-entry>
+    <history-entry file="ImplementationTest - 2019.06.30 at 18h 21m 38s.xml">
+      <configuration name="ImplementationTest" configurationId="PHPUnitRunConfigurationType" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2192000" />
+    <option name="totallyTimeSpent" value="2483000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1286" y="15" width="1263" height="1414" extended-state="0" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25349793" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25349793" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -321,7 +311,7 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Debug" order="3" visible="true" weight="0.39969015" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.39969015" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -349,14 +339,19 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/src/Database/MySQLStorageAdapter.php</url>
-          <line>131</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/test/ImplementationTest.php</url>
           <line>72</line>
           <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/src/Sorter/DocIdSorter.php</url>
+          <line>58</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/src/Sorter/DocIdSorter.php</url>
+          <line>62</line>
+          <option name="timeStamp" value="12" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -388,10 +383,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Database/MySQLStorageAdapter.php">
+    <entry file="file://$PROJECT_DIR$/vendor/phpunit/phpunit/src/Framework/TestCase.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="181">
-          <caret line="131" selection-start-line="131" selection-end-line="131" />
+        <state relative-caret-position="241">
+          <caret line="1193" selection-start-line="1193" selection-end-line="1193" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Sorter/WeightedFieldOrder.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="24" column="61" selection-start-line="24" selection-start-column="61" selection-end-line="24" selection-end-column="61" />
         </state>
       </provider>
     </entry>
@@ -402,31 +404,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/phpunit/phpunit/src/Framework/TestCase.php">
+    <entry file="file://$PROJECT_DIR$/src/Database/MySQLStorageAdapter.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="241">
-          <caret line="1193" selection-start-line="1193" selection-end-line="1193" />
+        <state relative-caret-position="421">
+          <caret line="264" column="30" selection-start-line="264" selection-start-column="30" selection-end-line="264" selection-end-column="30" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test/ImplementationTest.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
+        <state relative-caret-position="526">
           <caret line="72" selection-start-line="72" selection-end-line="72" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Sorter/DocIdSorter.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="24" column="61" selection-start-line="24" selection-start-column="61" selection-end-line="24" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Sorter/WeightedFieldOrder.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="24" column="61" selection-start-line="24" selection-start-column="61" selection-end-line="24" selection-end-column="61" />
+        <state relative-caret-position="331">
+          <caret line="62" selection-start-line="62" selection-end-line="62" />
         </state>
       </provider>
     </entry>

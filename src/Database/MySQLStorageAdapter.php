@@ -65,8 +65,8 @@ class MySQLStorageAdapter implements StorageAdapterInterface
         }
 
         return $fields["tksearch_word_{$key}"]
-            && $fields["tksearch_fword_{$key}"] 
-            && $fields["tksearch_dword_{$key}"] 
+            && $fields["tksearch_fword_{$key}"]
+            && $fields["tksearch_dword_{$key}"]
             && $fields["tksearch_field_{$key}"];
     }
 
@@ -139,9 +139,9 @@ class MySQLStorageAdapter implements StorageAdapterInterface
         }
 
         $wordRows = $this->loadWords($indexer, $key);
-        
+
         // insert doc words
-        $this->transaction(function() use ($key, $indexer, $wordRows) { 
+        $this->transaction(function() use ($key, $indexer, $wordRows) {
             foreach ($wordRows as $row) {
                 $stmnt = $this->query(
                     "INSERT INTO tksearch_dword_{$key} (doc_id, word_id, count) VALUE (:doc, :word, :count)",
@@ -189,7 +189,7 @@ class MySQLStorageAdapter implements StorageAdapterInterface
         if ($this->removeRow($key, $indexer->id) && $this->insertRow($key, $indexer)) {
             $this->pdo->commit();
             return true;
-        } 
+        }
 
         $this->pdo->rollBack();
         return false;
@@ -202,7 +202,7 @@ class MySQLStorageAdapter implements StorageAdapterInterface
             "SELECT * FROM tksearch_dword_{$key} WHERE doc_id = :id",
             compact("id")
         );
-        
+
         // delete field words
         $stmt = $this->query(
             "DELETE FROM tksearch_fword_{$key} WHERE doc_id = :id",
@@ -211,7 +211,7 @@ class MySQLStorageAdapter implements StorageAdapterInterface
         if (!Helper::ok($stmt)) {
             return false;
         }
-            
+
         // delete doc words
         $stmt = $this->query(
             "DELETE FROM tksearch_dword_{$key} WHERE doc_id = :id",
@@ -231,11 +231,11 @@ class MySQLStorageAdapter implements StorageAdapterInterface
             }
 
             return true;
-        }); 
+        });
         if (!$outcome) {
             return false;
         }
-        
+
         // clear words without counts
         $stmt = $this->query("DELETE FROM tksearch_word_{$key} WHERE count = 0");
         return Helper::ok($stmt);
@@ -251,10 +251,10 @@ class MySQLStorageAdapter implements StorageAdapterInterface
     public function docsForToken(string $key, string $token): array
     {
         $statement = $this->query(
-            "SELECT tksearch_doc_{$key}.*, tksearch_word_{$key}.word 
-            FROM tksearch_word_{$key}
+            "SELECT tksearch_dword_{$key}.*, tksearch_word_{$key}.word 
+            FROM tksearch_dword_{$key}
             INNER JOIN tksearch_word_{$key} 
-            ON tksearch_doc_{$key}.word_id = tksearch_word_{$key}.id
+            ON tksearch_dword_{$key}.word_id = tksearch_word_{$key}.id
             WHERE word LIKE ?",
             [$token]
         );
@@ -290,7 +290,7 @@ class MySQLStorageAdapter implements StorageAdapterInterface
 
     private function multiLike($field, $words): string
     {
-        return implode(" OR ", array_map(function($word) use ($field) { 
+        return implode(" OR ", array_map(function($word) use ($field) {
             return "`$field` LIKE ?";
         }), $words);
     }
@@ -363,7 +363,7 @@ class MySQLStorageAdapter implements StorageAdapterInterface
                     ON DUPLICATE KEY UPDATE count = `count` + :count",
                     compact("word", "count")
                 );
-            
+
                 if (!Helper::ok($out)) {
                     return false;
                 }
