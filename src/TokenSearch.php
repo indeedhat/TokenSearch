@@ -38,7 +38,7 @@ class TokenSearch
      */
     private $key;
 
-    function __construct(string $key, ?StorageAdapterInterface $adapter = null)
+    public function __construct(string $key, ?StorageAdapterInterface $adapter = null)
     {
         $this->key = $key;
 
@@ -78,26 +78,21 @@ class TokenSearch
     public function createIndex(string $query, string $idField): bool
     {
         if (!$this->discoveryAdapter) {
-            print "no discovery" . PHP_EOL;
             return false;
         }
 
         if ($this->storageAdapter->schemaExists($this->key)) {
-            print "schema exists" . PHP_EOL;
             return false;
         }
 
         if (!$this->storageAdapter->createSchema($this->key)) {
-            print "failed to create schema" . PHP_EOL;
             return false;
         }
 
         if (!$this->discoveryAdapter->query($query)) {
-            print "discovery query failed" . PHP_EOL;
             return false;
         }
 
-        print "while time" . PHP_EOL;
         while ($row = $this->discoveryAdapter->fetchRow()) {
             if (empty($row[$idField])) {
                 return false;
@@ -186,15 +181,15 @@ class TokenSearch
     protected function initDefaults(): void
     {
         if (!$this->tokenizer) {
-            $this->tokenizer = new WhiteSpaceTokenizer;
+            $this->tokenizer = new WhiteSpaceTokenizer();
         }
 
         if (!$this->sorter) {
-            $this->sorter = new BM25Sorter;
+            $this->sorter = new BM25Sorter();
         }
 
         if (!$this->storageAdapter) {
-            $this->storageAdapter = new MySQLStorageAdapter;
+            $this->storageAdapter = new MySQLStorageAdapter();
         }
     }
 }

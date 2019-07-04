@@ -15,10 +15,10 @@ class FieldIndexer extends AbstractIndexer
     public function index(): void
     {
         if (!$this->tokenizer) {
-            $this->tokenizer = new WhiteSpaceTokenizer;
+            $this->tokenizer = new WhiteSpaceTokenizer();
         }
 
-        $wordList = $this->tokenizer->tokenize($this->data[0]);
+        $wordList    = $this->tokenizer->tokenize($this->data[0]);
         $this->words = array_count_values($wordList);
     }
 
@@ -26,5 +26,4 @@ class FieldIndexer extends AbstractIndexer
     {
         $this->tokenizer = $tokenizer;
     }
-
 }

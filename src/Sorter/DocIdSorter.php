@@ -8,9 +8,9 @@ use IndeedHat\TokenSearch\Result;
 
 class DocIdSorter implements SorterInterface
 {
-/**
- * @var bool
- */
+    /**
+     * @var bool
+     */
     public $partialWords;
 
     public function run(StorageAdapterInterface $storage, string $key, array $tokens, array $fields = []): ResultsCollection
@@ -19,7 +19,7 @@ class DocIdSorter implements SorterInterface
             ? $this->withFields($storage, $key, $tokens, $fields)
             : $this->withoutFields($storage, $key, $tokens);
 
-        $docs = array_map(function($id) {
+        $docs = array_map(function ($id) {
             return new Result($id, 1);
         }, $docs);
 
@@ -41,16 +41,15 @@ class DocIdSorter implements SorterInterface
             }
         }
 
-        $docs = array_filter($docs, function(array $val) use ($fields) {
+        $docs = array_filter($docs, function (array $val) use ($fields) {
             return $fields[$val["word"]] ?? false;
         });
 
-        $docs = array_map(function(array $val) {
+        $docs = array_map(function (array $val) {
             return $val["doc_id"];
         }, $docs);
 
         return array_unique($docs);
-
     }
 
     private function withoutFields(StorageAdapterInterface $storage, $key, array $tokens): array

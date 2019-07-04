@@ -35,21 +35,21 @@ class MySQLStorageAdapter implements StorageAdapterInterface
     private $passwd;
 
 
-    function __construct(string $host, string $database, string $user, string $passwd)
+    public function __construct(string $host, string $database, string $user, string $passwd)
     {
         $this->pdo = new PDO("mysql:host={$host};dbname={$database}", $user, $passwd);
         $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-        $this->host = $host;
+        $this->host     = $host;
         $this->database = $database;
-        $this->user = $user;
-        $this->passwd = $passwd;
+        $this->user     = $user;
+        $this->passwd   = $passwd;
     }
 
 
     public function schemaExists(string $key): bool
     {
         $statement = $this->pdo->query("SHOW TABLES;");
-        if(!$statement) {
+        if (!$statement) {
             return false;
         }
 
@@ -124,7 +124,7 @@ class MySQLStorageAdapter implements StorageAdapterInterface
     public function insertRow(string $key, RowIndexer $indexer): bool
     {
         // check for existing
-        if($this->docExists($key, $indexer)) {
+        if ($this->docExists($key, $indexer)) {
             return false;
         }
 
@@ -141,7 +141,7 @@ class MySQLStorageAdapter implements StorageAdapterInterface
         $wordRows = $this->loadWords($indexer, $key);
 
         // insert doc words
-        $this->transaction(function() use ($key, $indexer, $wordRows) {
+        $this->transaction(function () use ($key, $indexer, $wordRows) {
             foreach ($wordRows as $row) {
                 $stmnt = $this->query(
                     "INSERT INTO tksearch_dword_{$key} (doc_id, word_id, count) VALUE (:doc, :word, :count)",
@@ -159,7 +159,7 @@ class MySQLStorageAdapter implements StorageAdapterInterface
         $fieldRows = $this->loadFields($indexer, $key);
 
         // insert field words
-        return $this->transaction(function() use ($key, $indexer, $fieldRows, $wordRows) {
+        return $this->transaction(function () use ($key, $indexer, $fieldRows, $wordRows) {
             foreach ($fieldRows as $field) {
                 $fieldIndex = $indexer->fields[$field["field"]];
                 foreach ($wordRows as $word) {
@@ -222,7 +222,7 @@ class MySQLStorageAdapter implements StorageAdapterInterface
         }
 
         // update word counts
-        $outcome = $this->transaction(function() use ($key, $words) {
+        $outcome = $this->transaction(function () use ($key, $words) {
             foreach ($words as $word) {
                 $stmt = $this->query("UPDATE tksearch_word_{$key} SET count = `count` - ?", [$word["count"]]);
                 if (!Helper::ok($stmt)) {
@@ -280,18 +280,18 @@ class MySQLStorageAdapter implements StorageAdapterInterface
 
     public function docsForPartialToken(string $key, string $token): array
     {
-        return $this->docsForToken($key, "%$token%");
+        return $this->docsForToken($key, "%${token}%");
     }
 
     public function fieldsForPartialToken(string $key, string $token): array
     {
-        return $this->fieldsForToken($key, "%$token%");
+        return $this->fieldsForToken($key, "%${token}%");
     }
 
     private function multiLike($field, $words): string
     {
-        return implode(" OR ", array_map(function($word) use ($field) {
-            return "`$field` LIKE ?";
+        return implode(" OR ", array_map(function ($word) use ($field) {
+            return "`${field}` LIKE ?";
         }), $words);
     }
 
@@ -299,7 +299,7 @@ class MySQLStorageAdapter implements StorageAdapterInterface
     {
         $this->pdo->beginTransaction();
 
-        $bound = Closure::bind($callback, $this);
+        $bound   = Closure::bind($callback, $this);
         $outcome = $bound();
 
         if ($outcome) {
@@ -336,7 +336,7 @@ class MySQLStorageAdapter implements StorageAdapterInterface
 
     private function insertFields(string $key, RowIndexer $indexer): bool
     {
-        return $this->transaction(function() use ($key, $indexer) {
+        return $this->transaction(function () use ($key, $indexer) {
             print_r($indexer);
 
             foreach ($indexer->fields as $field => $_) {
@@ -356,7 +356,7 @@ class MySQLStorageAdapter implements StorageAdapterInterface
 
     private function insertWords(string $key, RowIndexer $indexer): bool
     {
-        return $this->transaction(function() use ($key, $indexer) {
+        return $this->transaction(function () use ($key, $indexer) {
             foreach ($indexer->words as $word => $count) {
                 $out = $this->query(
                     "INSERT INTO tksearch_word_{$key} (word, count) VALUE (:word, :count)
@@ -375,7 +375,7 @@ class MySQLStorageAdapter implements StorageAdapterInterface
 
     private function loadFields(RowIndexer $indexer, string $key): array
     {
-        $fields = array_keys($indexer->fields);
+        $fields    = array_keys($indexer->fields);
         $fieldRows = $this->query("SELECT * FROM tksearch_field_{$key} WHERE `field` IN({$this->in($fields)})", $fields)
             ->fetchAll();
 
@@ -384,10 +384,9 @@ class MySQLStorageAdapter implements StorageAdapterInterface
 
     private function loadWords(RowIndexer $indexer, string $key): array
     {
-        $words = array_keys($indexer->words);
+        $words    = array_keys($indexer->words);
         $wordRows = $this->query("SELECT * FROM tksearch_word_{$key} WHERE `word` IN({$this->in($words)})", $words)
             ->fetchAll();
         return $wordRows;
     }
 }
-

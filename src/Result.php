@@ -20,18 +20,21 @@ class Result
      */
     private $weight;
 
-    function __construct(int $docId, float $weight)
+    /**
+     * @param
+     */
+    public function __construct(int $docId, float $weight)
     {
-        $this->docId = $docId;
+        $this->docId  = $docId;
         $this->weight = $weight;
     }
 
-    function __get($name)
+    public function __get($name)
     {
         return $this->{$name} ?? null;
     }
 
-    function __set($name, $val) 
+    public function __set($name, $val)
     {
         throw new Exception("results are immutable");
     }

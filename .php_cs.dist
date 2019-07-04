@@ -1,0 +1,26 @@
+<?php
+$finder = PhpCsFixer\Finder::create()
+    ->in('src')
+    ->in('test')
+;
+return PhpCsFixer\Config::create()
+    ->setRules([
+        '@PSR2' => true,
+        'no_unused_imports' => true,
+        'array_syntax' => ['syntax' => 'short'],
+        'binary_operator_spaces' => ['align_equals' => true],
+        'array_indentation' => true,
+        'concat_space' => ['spacing' => 'one'],
+        'explicit_string_variable' => true,
+        'fully_qualified_strict_types' => true,
+        'new_with_braces' => true,
+        'no_blank_lines_after_phpdoc' => true,
+        'no_leading_import_slash' => true,
+        'no_trailing_whitespace' => true,
+        'phpdoc_add_missing_param_annotation' => true,
+        'phpdoc_indent' => true,
+        'phpdoc_separation' => true,
+        'yoda_style' => true,
+    ])
+    ->setFinder($finder)
+;

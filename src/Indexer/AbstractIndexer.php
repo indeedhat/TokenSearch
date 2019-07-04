@@ -19,11 +19,11 @@ abstract class AbstractIndexer
      */
     protected $data;
 
-    function __construct(array $data, string $id = "")
+    public function __construct(array $data, string $id = "")
     {
         $this->data = $data;
-        $this->id = $id;
+        $this->id   = $id;
     }
 
-    public abstract function index(): void;
+    abstract public function index(): void;
 }

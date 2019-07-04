@@ -19,7 +19,7 @@ class WeightedFieldOrder implements SorterInterface
             ? $this->withFields($storage, $tokens, $fields)
             : $this->withoutFields($storage, $tokens);
 
-        $docs = array_map(function($weight, $id) {
+        $docs = array_map(function ($weight, $id) {
             return new Result($id, $weight);
         }, $docs);
 

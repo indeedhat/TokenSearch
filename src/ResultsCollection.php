@@ -7,11 +7,11 @@ use Countable;
 
 class ResultsCollection implements Countable
 {
-    const ORDER_ASC = 1;
+    const ORDER_ASC  = 1;
     const ORDER_DESC = -1;
 
     const ORDER_BY_WEIGHT = "weight";
-    const ORDER_BY_ID = "docId";
+    const ORDER_BY_ID     = "docId";
 
     /**
      * @var array
@@ -26,7 +26,7 @@ class ResultsCollection implements Countable
     /**
      * @throws Exception
      */
-    function __construct(array $results, int $totalDocs)
+    public function __construct(array $results, int $totalDocs)
     {
         foreach ($results as $result) {
             if (!$result instanceof Result) {
@@ -34,13 +34,13 @@ class ResultsCollection implements Countable
             }
         }
 
-        $this->results = $results;
+        $this->results   = $results;
         $this->totalDocs = $totalDocs;
     }
 
     public function ids(): array
     {
-        return array_map(function(Result $result) {
+        return array_map(function (Result $result) {
             return $result->docId;
         }, $this->results);
     }
