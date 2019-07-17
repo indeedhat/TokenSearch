@@ -337,8 +337,6 @@ class MySQLStorageAdapter implements StorageAdapterInterface
     private function insertFields(string $key, RowIndexer $indexer): bool
     {
         return $this->transaction(function () use ($key, $indexer) {
-            print_r($indexer);
-
             foreach ($indexer->fields as $field => $_) {
                 $out = $this->query(
                     "INSERT INTO tksearch_field_{$key} (field) VALUE (:field)",
