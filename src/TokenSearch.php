@@ -138,7 +138,7 @@ class TokenSearch
             return false;
         }
 
-        if (!$this->storageAdapter->schemaExists()) {
+        if (!$this->storageAdapter->schemaExists($this->key)) {
             return false;
         }
 
@@ -160,6 +160,7 @@ class TokenSearch
         unset($row[$idField]);
 
         $indexer = new RowIndexer($row, $id);
+        $indexer->index();
         return $this->storageAdapter->updateRow($this->key, $indexer);
     }
 

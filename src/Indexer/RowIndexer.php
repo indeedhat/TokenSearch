@@ -15,6 +15,10 @@ class RowIndexer extends AbstractIndexer
             $fieldIndex = new FieldIndexer([$field], $id);
             $fieldIndex->index();
 
+            if (!$fieldIndex->words) {
+                continue;
+            }
+
             $this->addToWordList($fieldIndex->words);
             $this->fields[$id] = $fieldIndex;
         }

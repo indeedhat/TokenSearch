@@ -6,6 +6,6 @@ class WhiteSpaceTokenizer implements TokenizerInterface
 {
     public function tokenize(string $subject): array
     {
-        return strtolower(preg_split("/\s+/", $subject, 0, PREG_SPLIT_NO_EMPTY));
+        return preg_split("/\s+/", strtolower($subject), 0, PREG_SPLIT_NO_EMPTY) ?? [];
     }
 }

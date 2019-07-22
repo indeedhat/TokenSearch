@@ -10,7 +10,7 @@ use PDOStatement;
 class MySQLStorageAdapter implements StorageAdapterInterface
 {
     /**
-     * @var PDO
+     * @var Database
      */
     private $pdo;
 
@@ -37,7 +37,7 @@ class MySQLStorageAdapter implements StorageAdapterInterface
 
     public function __construct(string $host, string $database, string $user, string $passwd)
     {
-        $this->pdo = new PDO("mysql:host={$host};dbname={$database}", $user, $passwd);
+        $this->pdo = new Database("mysql:host={$host};dbname={$database}", $user, $passwd);
         $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
         $this->host     = $host;
         $this->database = $database;
@@ -54,7 +54,7 @@ class MySQLStorageAdapter implements StorageAdapterInterface
         }
 
         $fields = [
-            "tksearch_word_{$key}" => false,
+            "tksearch_word_{$key}"  => false,
             "tksearch_dword_{$key}" => false,
             "tksearch_fword_{$key}" => false,
             "tksearch_field_{$key}" => false,
@@ -198,10 +198,14 @@ class MySQLStorageAdapter implements StorageAdapterInterface
     public function removeRow(string $key, int $id): bool
     {
         // load doc words
-        $words = $this->query(
+        $stmt = $this->query(
             "SELECT * FROM tksearch_dword_{$key} WHERE doc_id = :id",
             compact("id")
         );
+        if (!Helper::ok($stmt)) {
+            return false;
+        }
+        $words = $stmt->fetchAll();
 
         // delete field words
         $stmt = $this->query(
@@ -265,12 +269,12 @@ class MySQLStorageAdapter implements StorageAdapterInterface
     public function fieldsForToken(string $key, string $token): array
     {
         $statement = $this->query(
-            "SELECT tksearch_fword_{$key}.*, tksearch_field_{$key}.field, tksearch_field_{$key}.word
+            "SELECT tksearch_fword_{$key}.*, tksearch_field_{$key}.field, tksearch_word_{$key}.word
             FROM tksearch_word_{$key}
-            INNER JOIN tksearch_word_{$key} 
+            INNER JOIN tksearch_fword_{$key} 
             ON tksearch_fword_{$key}.word_id = tksearch_word_{$key}.id
             INNER JOIN tksearch_field_{$key}
-            ON tksearch_field_{$key}.word_id = tksearch_word_{$key}.id
+            ON tksearch_field_{$key}.id = tksearch_fword_{$key}.field_id
             WHERE word LIKE ?",
             [$token]
         );
@@ -297,7 +301,11 @@ class MySQLStorageAdapter implements StorageAdapterInterface
 
     private function transaction($callback): bool
     {
-        $this->pdo->beginTransaction();
+        try {
+            // stop existing transaction from fucking things up
+            $this->pdo->beginTransaction();
+        } catch (\Exception $e) {
+        }
 
         $bound   = Closure::bind($callback, $this);
         $outcome = $bound();

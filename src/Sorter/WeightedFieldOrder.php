@@ -16,14 +16,16 @@ class WeightedFieldOrder implements SorterInterface
     public function run(StorageAdapterInterface $storage, string $key, array $tokens, array $fields = []): ResultsCollection
     {
         $docs = !empty($fields)
-            ? $this->withFields($storage, $tokens, $fields)
-            : $this->withoutFields($storage, $tokens);
+            ? $this->withFields($storage, $key, $tokens, $fields)
+            : $this->withoutFields($storage, $key, $tokens);
 
-        $docs = array_map(function ($weight, $id) {
-            return new Result($id, $weight);
-        }, $docs);
+        $results = [];
 
-        $collection = new ResultsCollection($docs, count($docs));
+        foreach ($docs as $id => $weight) {
+            $results[] = new Result($id, $weight);
+        }
+
+        $collection = new ResultsCollection($results, count($results));
         $collection->reorder(ResultsCollection::ORDER_ASC, ResultsCollection::ORDER_BY_ID);
 
         return $collection;
