@@ -3,7 +3,6 @@
 namespace IndeedHat\TokenSearch;
 
 use IndeedHat\TokenSearch\Database\DiscoveryAdapterInterface;
-use IndeedHat\TokenSearch\Database\MySQLStorageAdapter;
 use IndeedHat\TokenSearch\Database\StorageAdapterInterface;
 use IndeedHat\TokenSearch\Indexer\RowIndexer;
 use IndeedHat\TokenSearch\Sorter\BM25Sorter;
@@ -192,10 +191,6 @@ class TokenSearch
 
         if (!$this->sorter) {
             $this->sorter = new BM25Sorter();
-        }
-
-        if (!$this->storageAdapter) {
-            $this->storageAdapter = new MySQLStorageAdapter();
         }
     }
 }
