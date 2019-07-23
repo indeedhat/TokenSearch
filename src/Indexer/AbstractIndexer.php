@@ -5,6 +5,11 @@ namespace IndeedHat\TokenSearch\Indexer;
 abstract class AbstractIndexer
 {
     /**
+     * @var TokenizerInterface
+     */
+    protected $tokenizer;
+
+    /**
      * @var array
      */
     public $words;
@@ -26,4 +31,9 @@ abstract class AbstractIndexer
     }
 
     abstract public function index(): void;
+
+    public function withTokenizer(TokenizerInterface $tokenizer): self
+    {
+        $this->tokenizer = $tokenizer;
+    }
 }

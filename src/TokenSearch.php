@@ -45,6 +45,8 @@ class TokenSearch
         if ($adapter instanceof StorageAdapterInterface) {
             $this->storageAdapter = $adapter;
         }
+
+        $this->initDefaults();
     }
 
     public function withDiscoveryAdapter(DiscoveryAdapterInterface $adapter)
@@ -102,6 +104,7 @@ class TokenSearch
             unset($row[$idField]);
 
             $indexer = new RowIndexer($row, $id);
+            $indexer->withTokenizer($this->tokenizer);
             $indexer->index();
             if (!$this->storageAdapter->insertRow($this->key, $indexer)) {
                 return false;
@@ -160,6 +163,7 @@ class TokenSearch
         unset($row[$idField]);
 
         $indexer = new RowIndexer($row, $id);
+        $indexer->withTokenizer($this->tokenizer);
         $indexer->index();
 
         return $this->storageAdapter->updateRow($this->key, $indexer);

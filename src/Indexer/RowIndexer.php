@@ -13,6 +13,7 @@ class RowIndexer extends AbstractIndexer
     {
         foreach ($this->data as $id => $field) {
             $fieldIndex = new FieldIndexer([$field], $id);
+            $fieldIndex->withTokenizer($this->tokenizer);
             $fieldIndex->index();
 
             if (!$fieldIndex->words) {
