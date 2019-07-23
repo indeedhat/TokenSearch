@@ -43,9 +43,9 @@ class WeightedFieldOrder implements SorterInterface
 
         foreach ($tokens as $token) {
             if ($this->partialWords) {
-                $tmp = array_merge($docs, $storage->fieldsForPartialToken($key, $token));
+                $tmp = $storage->fieldsForPartialToken($key, $token);
             } else {
-                $tmp = array_merge($docs, $storage->fieldsForToken($key, $token));
+                $tmp = $storage->fieldsForToken($key, $token);
             }
 
             foreach ($tmp as $doc) {
