@@ -161,6 +161,7 @@ class TokenSearch
 
         $indexer = new RowIndexer($row, $id);
         $indexer->index();
+
         return $this->storageAdapter->updateRow($this->key, $indexer);
     }
 

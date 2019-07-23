@@ -228,7 +228,10 @@ class MySQLStorageAdapter implements StorageAdapterInterface
         // update word counts
         $outcome = $this->transaction(function () use ($key, $words) {
             foreach ($words as $word) {
-                $stmt = $this->query("UPDATE tksearch_word_{$key} SET count = `count` - ?", [$word["count"]]);
+                $stmt = $this->query(
+                    "UPDATE tksearch_word_{$key} SET count = `count` - ? WHERE id = ?",
+                    [$word["count"], $word["id"]]
+                );
                 if (!Helper::ok($stmt)) {
                     return false;
                 }
@@ -241,7 +244,7 @@ class MySQLStorageAdapter implements StorageAdapterInterface
         }
 
         // clear words without counts
-        $stmt = $this->query("DELETE FROM tksearch_word_{$key} WHERE count = 0");
+        $stmt = $this->query("DELETE FROM tksearch_word_{$key} WHERE count <= 0");
         return Helper::ok($stmt);
     }
 
