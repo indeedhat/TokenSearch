@@ -2,6 +2,8 @@
 
 namespace IndeedHat\TokenSearch\Indexer;
 
+use IndeedHat\TokenSearch\Tokenizer\TokenizerInterface;
+
 abstract class AbstractIndexer
 {
     /**
@@ -32,7 +34,7 @@ abstract class AbstractIndexer
 
     abstract public function index(): void;
 
-    public function withTokenizer(TokenizerInterface $tokenizer): self
+    public function withTokenizer(TokenizerInterface $tokenizer): void
     {
         $this->tokenizer = $tokenizer;
     }
