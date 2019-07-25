@@ -54,7 +54,7 @@ class MySQLStorageAdapter implements StorageAdapterInterface
         }
 
         $fields = [
-            "tksearch_word_{$key}"  => false,
+            "tksearch_word_{$key}" => false,
             "tksearch_dword_{$key}" => false,
             "tksearch_fword_{$key}" => false,
             "tksearch_field_{$key}" => false,
@@ -141,45 +141,38 @@ class MySQLStorageAdapter implements StorageAdapterInterface
         $wordRows = $this->loadWords($indexer, $key);
 
         // insert doc words
-        $this->transaction(function () use ($key, $indexer, $wordRows) {
-            foreach ($wordRows as $row) {
-                $stmnt = $this->query(
-                    "INSERT INTO tksearch_dword_{$key} (doc_id, word_id, count) VALUE (:doc, :word, :count)",
-                    ["doc" => $indexer->id, "word" => $row["id"], "count" => $indexer->words[$row["word"]]]
-                );
+        $rows = [];
+        foreach ($wordRows as $row) {
+            $rows[] = [$indexer->id, $row["id"], $indexer->words[$row["word"]]];
+        }
 
-                if (!Helper::ok($stmnt)) {
-                    return false;
-                }
-            }
+        $stmnt = $this->query(
+            "INSERT INTO tksearch_dword_{$key} (doc_id, word_id, count)"
+            . Helper::buildMultiRowQueryTemplate($rows),
+            $rows
+        );
 
-            return true;
-        });
 
         $fieldRows = $this->loadFields($indexer, $key);
 
         // insert field words
-        return $this->transaction(function () use ($key, $indexer, $fieldRows, $wordRows) {
-            foreach ($fieldRows as $field) {
-                $fieldIndex = $indexer->fields[$field["field"]];
-                foreach ($wordRows as $word) {
-                    if (!isset($fieldIndex->words[$word["word"]])) {
-                        continue;
-                    }
-                    $stmt = $this->query(
-                        "INSERT INTO tksearch_fword_{$key} (doc_id, word_id, field_id, count) VALUES (:doc, :word, :field, :count)",
-                        ["doc" => $indexer->id, "word" => $word["id"], "field" => $field["id"], "count" => $fieldIndex->words[$word["word"]]]
-                    );
-
-
-                    if (!Helper::ok($stmt)) {
-                        return false;
-                    }
+        $rows = [];
+        foreach ($fieldRows as $field) {
+            $fieldIndex = $indexer->fields[$field["field"]];
+            foreach ($wordRows as $word) {
+                if (!isset($fieldIndex->words[$word["word"]])) {
+                    continue;
                 }
-            }
 
-            return true;
-        });
+                $rows[] = [$indexer->id, $word["id"], $field["id"], $fieldIndex->words[$word["word"]]];
+            }
+        }
+
+        $stmt = $this->query(
+            "INSERT INTO tksearch_fword_{$key} (doc_id, word_id, field_id, count)"
+           . Helper::buildMultiRowQueryTemplate($rows),
+            $rows
+        );
     }
 
     public function updateRow(string $key, RowIndexer $indexer): bool

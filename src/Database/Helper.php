@@ -29,4 +29,22 @@ class Helper
     {
         return "23000" == $statement->errorCode();
     }
+
+    /**
+     * build a template for a multi row insert query
+     *
+     * @param array $rows
+     *
+     * @return string
+     */
+    public static function buildMultiRowQueryTemplate(array $rows): string
+    {
+        $template = [];
+
+        foreach ($rows as $row) {
+            $template[] = "(" . substr(str_repeat("?, ", count($row)), 0, -2) . ")";
+        }
+
+        return implode(",", $template);
+    }
 }
