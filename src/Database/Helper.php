@@ -47,4 +47,21 @@ class Helper
 
         return implode(",", $template);
     }
+
+    /**
+     * Flatten out a nested array of row data
+     *
+     * @param array $rows
+     *
+     * @return array
+     */
+    public static function flattenParamArray(array $rows): array
+    {
+        $flat = [];
+        foreach ($rows as $row) {
+            $flat = array_merge($flat, $row);
+        }
+
+        return $flat;
+    }
 }

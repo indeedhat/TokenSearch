@@ -34,7 +34,7 @@ abstract class AbstractIndexer
 
     abstract public function index(): void;
 
-    public function withTokenizer(TokenizerInterface $tokenizer): void
+    public function withTokenizer(?TokenizerInterface $tokenizer): void
     {
         $this->tokenizer = $tokenizer;
     }

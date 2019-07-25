@@ -4,7 +4,6 @@ namespace IndeedHat\TokenSearch\Test;
 
 use IndeedHat\TokenSearch\Database\MySQLDiscoveryAdapter;
 use IndeedHat\TokenSearch\Database\MySQLStorageAdapter;
-use IndeedHat\TokenSearch\Indexer\RowIndexer;
 use IndeedHat\TokenSearch\Sorter\DocIdSorter;
 use IndeedHat\TokenSearch\TokenSearch;
 use IndeedHat\TokenSearch\Tokenizer\WhiteSpaceTokenizer;
@@ -49,7 +48,7 @@ class ImplementationTest extends TestCase
 
         if ($tk->indexExists()) {
             $tk->removeIndex();
-        } 
+        }
 
         self::$tksearch = $tk;
     }
@@ -70,6 +69,5 @@ class ImplementationTest extends TestCase
     public function searchCheck(): void
     {
         $this->expectNotToPerformAssertions();
-        var_dump(self::$tksearch->search("jane"));
     }
 }

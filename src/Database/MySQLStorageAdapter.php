@@ -149,7 +149,7 @@ class MySQLStorageAdapter implements StorageAdapterInterface
         $stmnt = $this->query(
             "INSERT INTO tksearch_dword_{$key} (doc_id, word_id, count)"
             . Helper::buildMultiRowQueryTemplate($rows),
-            $rows
+            Helper::flattenParamArray($rows)
         );
 
 
@@ -171,8 +171,10 @@ class MySQLStorageAdapter implements StorageAdapterInterface
         $stmt = $this->query(
             "INSERT INTO tksearch_fword_{$key} (doc_id, word_id, field_id, count)"
            . Helper::buildMultiRowQueryTemplate($rows),
-            $rows
+            Helper::flattenParamArray($rows)
         );
+
+        return true;
     }
 
     public function updateRow(string $key, RowIndexer $indexer): bool
