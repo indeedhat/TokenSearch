@@ -96,7 +96,7 @@ class TokenSearch
 
         while ($row = $this->discoveryAdapter->fetchRow()) {
             if (empty($row[$idField])) {
-                return false;
+                continue;
             }
 
             $id = $row[$idField];
@@ -106,7 +106,7 @@ class TokenSearch
             $indexer->withTokenizer($this->tokenizer);
             $indexer->index();
             if (!$this->storageAdapter->insertRow($this->key, $indexer)) {
-                return false;
+                continue;
             }
         }
 
