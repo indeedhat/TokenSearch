@@ -54,7 +54,7 @@ class MySQLStorageAdapter implements StorageAdapterInterface
         }
 
         $fields = [
-            "tksearch_word_{$key}" => false,
+            "tksearch_word_{$key}"  => false,
             "tksearch_dword_{$key}" => false,
             "tksearch_fword_{$key}" => false,
             "tksearch_field_{$key}" => false,
@@ -78,7 +78,8 @@ class MySQLStorageAdapter implements StorageAdapterInterface
                 `word` VARCHAR(50),
                 `count` INT(11),
                 PRIMARY KEY(`id`),
-                UNIQUE KEY(`word`)
+                UNIQUE KEY(`word`),
+                INDEX(`count`)
             ) ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
         
             CREATE TABLE IF NOT EXISTS tksearch_field_{$key} (
@@ -147,7 +148,7 @@ class MySQLStorageAdapter implements StorageAdapterInterface
         }
 
         $stmnt = $this->query(
-            "INSERT INTO tksearch_dword_{$key} (doc_id, word_id, count)"
+            "INSERT INTO tksearch_dword_{$key} (doc_id, word_id, count) VALUES "
             . Helper::buildMultiRowQueryTemplate($rows),
             Helper::flattenParamArray($rows)
         );
@@ -169,7 +170,7 @@ class MySQLStorageAdapter implements StorageAdapterInterface
         }
 
         $stmt = $this->query(
-            "INSERT INTO tksearch_fword_{$key} (doc_id, word_id, field_id, count)"
+            "INSERT INTO tksearch_fword_{$key} (doc_id, word_id, field_id, count) VALUES "
            . Helper::buildMultiRowQueryTemplate($rows),
             Helper::flattenParamArray($rows)
         );
