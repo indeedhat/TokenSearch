@@ -174,7 +174,7 @@ class TokenSearch
             return false;
         }
 
-        return $this->storageAdapter->removeRow($index);
+        return $this->storageAdapter->removeRow($this->key, $index);
     }
 
     public function search(string $query, array $fields = []): ResultsCollection
