@@ -170,7 +170,7 @@ class TokenSearch
 
     public function removeDocument(int $index): bool
     {
-        if (!$this->storageAdapter->schemaExists()) {
+        if (!$this->storageAdapter->schemaExists($this->key)) {
             return false;
         }
 
