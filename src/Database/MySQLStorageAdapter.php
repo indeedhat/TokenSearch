@@ -389,9 +389,14 @@ class MySQLStorageAdapter implements StorageAdapterInterface
 
     private function loadWords(RowIndexer $indexer, string $key): array
     {
+        if (empty($indexer->words)) {
+            return [];
+        }
+        
         $words    = array_keys($indexer->words);
         $wordRows = $this->query("SELECT * FROM tksearch_word_{$key} WHERE `word` IN({$this->in($words)})", $words)
             ->fetchAll();
+        
         return $wordRows;
     }
 }
