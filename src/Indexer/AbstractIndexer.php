@@ -14,7 +14,7 @@ abstract class AbstractIndexer
     /**
      * @var array
      */
-    public $words;
+    public $words = [];
 
     /**
      * @var string

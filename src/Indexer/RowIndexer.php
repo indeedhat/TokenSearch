@@ -7,7 +7,7 @@ class RowIndexer extends AbstractIndexer
     /**
      * @var array
      */
-    public $fields;
+    public $fields = [];
 
     public function index(): void
     {
